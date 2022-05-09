@@ -25,6 +25,8 @@
     will-change: transform;
     transform: translateY(var(--heightActive));
     transition: transform 600ms cubic-bezier(.3, .7, .4, 1);
+    filter: blur(4px);
+    cursor: auto;
 }
 
 .shadowDisabled {
