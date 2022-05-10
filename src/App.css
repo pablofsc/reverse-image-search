@@ -56,3 +56,28 @@ body {
     padding: 22px 0 0 0;
     margin: -22px 0 0 0;
 }
+
+@media (max-width: 750px) {
+    body {
+        width: 100vw;
+    }
+
+    .actionsList {
+        flex-direction: row;
+        height: fit-content;
+        padding: 0;
+        justify-content: space-around;
+    }
+
+    .buttonsList {
+        width: 75%;
+    }
+
+    .input {
+        width: 75%;
+    }
+
+    .App {
+        flex-direction: column;
+    }
+}

@@ -29,7 +29,7 @@ const App = () => {
 
     return (
         <div className="App">
-            <div className='buttonsList'>
+            <div className='buttonsList actionsList'>
                 <Button
                     pushable='pushable'
                     shadow='shadow'
