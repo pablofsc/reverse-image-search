@@ -9,10 +9,14 @@ import FileUpload from './components/FileUpload'
 
 const App = () => {
     const [source = '', setSource] = useState<string>()
+    const [sourceIsEmpty, setSIE] = useState(true)
 
     const updateSource = (newSource: string) => {
         (document.getElementById('sourceInput')! as HTMLInputElement).value = newSource
         setSource(newSource)
+
+        if (newSource == '') setSIE(true)
+        else setSIE(false)
     }
 
     const clearInput = () => {
@@ -32,6 +36,18 @@ const App = () => {
         (document.getElementsByClassName('input')[0] as HTMLInputElement).value = ''
     }
 
+    let pushableD = 'pushable '
+    let shadowD = 'shadow '
+    let frontD = 'front '
+    let styleD = {}
+
+    if (sourceIsEmpty) {
+        pushableD += 'pushableDisabled'
+        shadowD += 'shadowDisabled'
+        frontD += 'frontDisabled'
+        styleD = { cursor: 'default' }
+    }
+
     return (
         <div className="App">
             <div className='buttonsList sourceList'>
@@ -45,10 +61,10 @@ const App = () => {
                 />
 
                 <Button
-                    pushable='pushable'
-                    shadow='shadow'
+                    pushable={pushableD}
+                    shadow={shadowD}
                     edge='edge red'
-                    front='front'
+                    front={frontD}
                     content='icon:trash-can'
                     action={clearInput}
                 />
@@ -59,7 +75,7 @@ const App = () => {
             <input
                 id='sourceInput'
                 type="text"
-                onChange={event => setSource(event.target.value)}
+                onChange={event => updateSource(event.target.value)}
                 className='input'
                 placeholder='Drop an image from the web here. Local files not supported yet.'
             />
