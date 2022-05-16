@@ -5,21 +5,26 @@ import './Pushable.css'
 
 import SearchEngineButton from './components/SearchEngineButton'
 import Button from './components/Button'
-import Icon from './components/Icon'
+import FileUpload from './components/FileUpload'
 
 const App = () => {
     const [source = '', setSource] = useState<string>()
 
+    const updateSource = (newSource: string) => {
+        (document.getElementById('sourceInput')! as HTMLInputElement).value = newSource
+        setSource(newSource)
+    }
+
     const clearInput = () => {
         (document.getElementsByClassName('input')[0] as HTMLInputElement).value = ''
-        setSource('')
+        updateSource('')
     }
 
     const readClipboard = () => {
         navigator.clipboard.readText()
             .then(text => {
                 (document.getElementsByClassName('input')[0] as HTMLInputElement).value = text
-                setSource(text)
+                updateSource(text)
             })
             .catch(err => {
                 console.error('Failed to read clipboard contents: ', err);
@@ -29,7 +34,7 @@ const App = () => {
 
     return (
         <div className="App">
-            <div className='buttonsList actionsList'>
+            <div className='buttonsList sourceList'>
                 <Button
                     pushable='pushable'
                     shadow='shadow'
@@ -47,9 +52,12 @@ const App = () => {
                     content='icon:trash-can'
                     action={clearInput}
                 />
+
+                <FileUpload action={updateSource} />
             </div>
 
             <input
+                id='sourceInput'
                 type="text"
                 onChange={event => setSource(event.target.value)}
                 className='input'

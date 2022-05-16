@@ -19,15 +19,26 @@ body {
 
 .buttonsList {
     height: 250px;
-
     padding: 0 10px;
+    margin: 25px;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
+
     background-color: #D3E0EA;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-    margin: 25px;
     border-radius: 20px;
+}
+
+.sourceList {
+    box-sizing: border-box;
+    padding: 10px 20px;
+
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 200px;
+    justify-content: space-between;
 }
 
 .searchButton {
@@ -49,12 +60,14 @@ body {
     caret-color: transparent;
 }
 
-.searchButton a {
+.actionInButton {
     display: inline-block;
     position: relative;
     z-index: 1;
     padding: 22px 0 0 0;
     margin: -22px 0 0 0;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 @media (max-width: 750px) {
@@ -62,7 +75,7 @@ body {
         width: 100vw;
     }
 
-    .actionsList {
+    .sourceList {
         flex-direction: row;
         height: fit-content;
         padding: 0;

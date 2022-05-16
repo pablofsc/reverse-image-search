@@ -44,7 +44,7 @@ const SearchEngineButton = (props: SearchEngineButtonProperties) => {
 
     return (
         <div className="searchButton">
-            <a href={destination} target={target}>
+            <a href={destination} target={target} className='actionInButton' style={{ cursor: 'default' }}>
                 <Button
                     pushable={pushable}
                     shadow={shadow}

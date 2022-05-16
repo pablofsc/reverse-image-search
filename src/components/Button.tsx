@@ -17,24 +17,28 @@ const Button = (props: ButtonProperties) => {
 
     if (props.content.includes('icon:')) {
         return (
-            <button className={props.pushable} style={{ margin: '25px 10px' }} onClick={props.action}>
-                <span className={props.shadow}></span>
-                <span className={props.edge}></span>
-                <span className={props.front} style={{ width: 'fit-content', height: '30px' }}>
-                    {Icon(props.content.slice(5))}
-                </span>
-            </button>
+            <div>
+                <div className={props.pushable} style={{ margin: '25px 10px' }} onClick={props.action}>
+                    <span className={props.shadow}></span>
+                    <span className={props.edge}></span>
+                    <span className={props.front} style={{ width: 'fit-content', height: '30px' }}>
+                        {Icon(props.content.slice(5))}
+                    </span>
+                </div>
+            </div>
         )
     }
     else {
         return (
-            <button className={props.pushable}>
-                <span className={props.shadow}></span>
-                <span className={props.edge}></span>
-                <span className={props.front}>
-                    {props.content}
-                </span>
-            </button>
+            <div>
+                <div className={props.pushable}>
+                    <span className={props.shadow}></span>
+                    <span className={props.edge}></span>
+                    <span className={props.front}>
+                        {props.content}
+                    </span>
+                </div>
+            </div>
         )
     }
 }
