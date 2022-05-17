@@ -1,7 +1,7 @@
 import Icon from './Icon'
 import { useState } from 'react'
 
-const ImageStoreServer = 'http://localhost:3001'
+const ImageStoreServer = 'https://pablofsc-image-store.herokuapp.com'
 
 interface FileUploadInterface {
     action: (source: string) => void

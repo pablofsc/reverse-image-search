@@ -77,7 +77,7 @@ const App = () => {
                 type="text"
                 onChange={event => updateSource(event.target.value)}
                 className='input'
-                placeholder='Drop an image from the web here. Local files not supported yet.'
+                placeholder='Drop an image from the web here.'
             />
 
             <div className='buttonsList'>
