@@ -38,6 +38,7 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     width: 200px;
+    min-width: 200px;
     justify-content: space-between;
 }
 

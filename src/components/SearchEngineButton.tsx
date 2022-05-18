@@ -1,4 +1,4 @@
-import Button from './Button'
+import Pushable from './Pushable'
 
 interface SearchEngineButtonProperties {
     engine: string,
@@ -11,49 +11,41 @@ const isImage = (url: string) => {
 
 const SearchEngineButton = (props: SearchEngineButtonProperties) => {
     let destination = ''
-
-    let pushable = 'pushable '
-    let shadow = 'shadow '
-    let edge = 'edge '
-    let front = 'front '
+    let color = ''
+    let isDisabled = false
     let target = '_blank'
 
     if (props.engine == 'Google') {
         destination = 'https://www.google.com/searchbyimage?image_url=' + props.source
-        edge += 'green'
+        color = 'green'
     }
     else if (props.engine == 'Bing') {
         destination = 'https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=' + props.source
-        edge += 'yellow'
+        color = 'yellow'
     }
     else if (props.engine == 'Yandex') {
         destination = 'https://yandex.com/images/search?rpt=imageview&url=' + props.source
-        edge += 'red'
+        color = 'red'
     }
 
-
     if (props.source === '' || !isImage(props.source)) {
+        isDisabled = true
         destination = ''
-
-        pushable += 'pushableDisabled'
-        shadow += 'shadowDisabled'
-        front += 'frontDisabled'
-
-        target = ''
+        target = '_self'
     }
 
     return (
         <div className="searchButton">
             <a href={destination} target={target} className='actionInButton' style={{ cursor: 'default' }}>
-                <Button
-                    pushable={pushable}
-                    shadow={shadow}
-                    edge={edge}
-                    front={front}
-                    content={props.engine}
+                <Pushable
+                    color={color}
+                    disabled={isDisabled}
+                    content={() => props.engine}
+                    args={props.engine}
+                    width='125px'
                 />
             </a>
-        </div >
+        </div>
     )
 
 }

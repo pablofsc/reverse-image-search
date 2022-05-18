@@ -4,69 +4,46 @@ import './App.css'
 import './Pushable.css'
 
 import SearchEngineButton from './components/SearchEngineButton'
-import Button from './components/Button'
+import Pushable from './components/Pushable'
+import Icon from './components/Icon'
 import FileUpload from './components/FileUpload'
 
 const App = () => {
-    const [source = '', setSource] = useState<string>()
-    const [sourceIsEmpty, setSIE] = useState(true)
+    const [source, setSource] = useState('')
+
+    const textArea = () => document.getElementById('sourceInput')! as HTMLInputElement
 
     const updateSource = (newSource: string) => {
-        (document.getElementById('sourceInput')! as HTMLInputElement).value = newSource
+        textArea().value = newSource
         setSource(newSource)
-
-        if (newSource == '') setSIE(true)
-        else setSIE(false)
     }
 
-    const clearInput = () => {
-        (document.getElementsByClassName('input')[0] as HTMLInputElement).value = ''
-        updateSource('')
-    }
+    const clearInput = () => updateSource('')
 
     const readClipboard = () => {
         navigator.clipboard.readText()
-            .then(text => {
-                (document.getElementsByClassName('input')[0] as HTMLInputElement).value = text
-                updateSource(text)
-            })
-            .catch(err => {
-                console.error('Failed to read clipboard contents: ', err);
-            });
-        (document.getElementsByClassName('input')[0] as HTMLInputElement).value = ''
-    }
-
-    let pushableD = 'pushable '
-    let shadowD = 'shadow '
-    let frontD = 'front '
-    let styleD = {}
-
-    if (sourceIsEmpty) {
-        pushableD += 'pushableDisabled'
-        shadowD += 'shadowDisabled'
-        frontD += 'frontDisabled'
-        styleD = { cursor: 'default' }
+            .then(text => updateSource(text))
+            .catch(err => console.error('Failed to read clipboard contents: ', err))
     }
 
     return (
         <div className="App">
             <div className='buttonsList sourceList'>
-                <Button
-                    pushable='pushable'
-                    shadow='shadow'
-                    edge='edge blue'
-                    front='front'
-                    content='icon:paste'
+                <Pushable
+                    color='blue'
+                    content={Icon}
+                    args='paste'
                     action={readClipboard}
+                    style={{ margin: '25px 10px' }}
                 />
 
-                <Button
-                    pushable={pushableD}
-                    shadow={shadowD}
-                    edge='edge red'
-                    front={frontD}
-                    content='icon:trash-can'
+                <Pushable
+                    color='red'
+                    content={Icon}
+                    args='trash-can'
                     action={clearInput}
+                    disabled={!!!source}
+                    style={{ margin: '25px 10px' }}
                 />
 
                 <FileUpload action={updateSource} />
