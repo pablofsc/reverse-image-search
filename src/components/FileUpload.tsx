@@ -65,7 +65,7 @@ const FileUpload = (props: FileUploadInterface) => {
                 (labelStyle: object) => {
                     return (<>
                         <input type="file" id="fileIn" style={{ display: 'none' }} />
-                        <label htmlFor="fileIn" className='actionInButton' onClick={pickerDisabled ? null : waitForFile} style={labelStyle}>
+                        <label htmlFor="fileIn" className='actionInButton' onClick={pickerDisabled ? () => { } : waitForFile} style={labelStyle}>
                             {Icon("pickfile")}
                         </label>
                     </>)
@@ -82,7 +82,7 @@ const FileUpload = (props: FileUploadInterface) => {
                 (labelStyle: object) => {
                     return (<>
                         <input type="submit" id='submit' style={{ display: 'none' }} />
-                        <label htmlFor="submit" className='actionInButton' onClick={(submitDisabled ? null : submitFile)} style={labelStyle} >
+                        <label htmlFor="submit" className='actionInButton' onClick={(submitDisabled ? () => { } : submitFile)} style={labelStyle} >
                             {Icon("upload")}
                         </label>
                     </>)
