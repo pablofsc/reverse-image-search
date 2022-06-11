@@ -1,69 +1,61 @@
-import { useState } from 'react'
+import { useState, ReactElement } from 'react';
 
-import './App.css'
-import './Pushable.css'
+import './App.css';
 
-import SearchEngineButton from './components/SearchEngineButton'
-import Pushable from './components/Pushable'
-import Icon from './components/Icon'
-import FileUpload from './components/FileUpload'
+import SearchEngineButton from './components/SearchEngineButton';
+import Pushable from './components/Pushable';
+import Icon from './components/Icon';
+import FileUpload from './components/FileUpload';
 
-const App = () => {
-    const [source, setSource] = useState('')
+const App = (): ReactElement => {
+    const [imageSource, setImageSource] = useState<string>('');
 
-    const textArea = () => document.getElementById('sourceInput')! as HTMLInputElement
+    const clearSource = (): void => setImageSource('');
 
-    const updateSource = (newSource: string) => {
-        textArea().value = newSource
-        setSource(newSource)
-    }
-
-    const clearInput = () => updateSource('')
-
-    const readClipboard = () => {
+    const readClipboard = (): void => {
         navigator.clipboard.readText()
-            .then(text => updateSource(text))
-            .catch(err => console.error('Failed to read clipboard contents: ', err))
-    }
+            .then(text => setImageSource(text))
+            .catch(err => console.error('Failed to read clipboard contents: ', err));
+    };
 
     return (
-        <div className="App">
+        <div className='App'>
             <div className='buttonsList sourceList'>
                 <Pushable
+                    class='actionButton'
                     color='blue'
                     content={Icon}
                     args='paste'
                     action={readClipboard}
-                    style={{ margin: '25px 10px' }}
                 />
 
                 <Pushable
+                    class='actionButton'
                     color='red'
                     content={Icon}
                     args='trash-can'
-                    action={clearInput}
-                    disabled={!!!source}
-                    style={{ margin: '25px 10px' }}
+                    action={clearSource}
+                    disabled={!!!imageSource}
                 />
 
-                <FileUpload action={updateSource} />
+                <FileUpload showOnScreen={setImageSource} />
             </div>
 
             <input
-                id='sourceInput'
-                type="text"
-                onChange={event => updateSource(event.target.value)}
                 className='input'
+                type='text'
                 placeholder='Drop an image from the web here.'
+                value={imageSource}
+                onChange={event => setImageSource(event.target.value)}
             />
 
             <div className='buttonsList'>
-                <SearchEngineButton engine='Google' source={source} />
-                <SearchEngineButton engine='Bing' source={source} />
-                <SearchEngineButton engine='Yandex' source={source} />
+                <SearchEngineButton engine='Google' source={imageSource} />
+                <SearchEngineButton engine='Bing' source={imageSource} />
+                <SearchEngineButton engine='Yandex' source={imageSource} />
             </div>
         </div >
-    )
-}
+    );
+};
 
-export default App
+export default App;

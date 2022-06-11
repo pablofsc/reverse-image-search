@@ -1,41 +1,41 @@
-import Pushable from './Pushable'
+import Pushable from './Pushable';
 
-interface SearchEngineButtonProperties {
+interface Properties {
     engine: string,
-    source: string
+    source: string;
 }
 
 const isImage = (url: string) => {
     return /(\.|format=)(jpg|jpeg|png|jfif)/.test(url);
-}
+};
 
-const SearchEngineButton = (props: SearchEngineButtonProperties) => {
-    let destination = ''
-    let color = ''
-    let isDisabled = false
-    let target = '_blank'
+const SearchEngineButton = (props: Properties) => {
+    let destination = '';
+    let color = '';
+    let isDisabled = false;
+    let target = '_blank';
 
     if (props.engine == 'Google') {
-        destination = 'https://www.google.com/searchbyimage?image_url=' + props.source
-        color = 'green'
+        destination = 'https://www.google.com/searchbyimage?image_url=' + props.source;
+        color = 'green';
     }
     else if (props.engine == 'Bing') {
-        destination = 'https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=' + props.source
-        color = 'yellow'
+        destination = 'https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl=' + props.source;
+        color = 'yellow';
     }
     else if (props.engine == 'Yandex') {
-        destination = 'https://yandex.com/images/search?rpt=imageview&url=' + props.source
-        color = 'red'
+        destination = 'https://yandex.com/images/search?rpt=imageview&url=' + props.source;
+        color = 'red';
     }
 
     if (props.source === '' || !isImage(props.source)) {
-        isDisabled = true
-        destination = ''
-        target = '_self'
+        isDisabled = true;
+        destination = '';
+        target = '_self';
     }
 
     return (
-        <div className="searchButton">
+        <div className='searchButton'>
             <a href={destination} target={target} className='actionInButton' style={{ cursor: 'default' }}>
                 <Pushable
                     color={color}
@@ -46,8 +46,7 @@ const SearchEngineButton = (props: SearchEngineButtonProperties) => {
                 />
             </a>
         </div>
-    )
+    );
+};
 
-}
-
-export default SearchEngineButton
+export default SearchEngineButton;

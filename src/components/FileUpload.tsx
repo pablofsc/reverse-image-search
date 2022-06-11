@@ -1,97 +1,93 @@
-import Pushable from './Pushable'
-import Icon from './Icon'
-import { useState } from 'react'
+import { FormEvent, ReactElement, useState } from 'react';
 
-const storage = 'https://pablofsc-image-store.herokuapp.com'
+import Pushable from './Pushable';
+import Icon from './Icon';
+import { sendToStorage, storageURL } from '../utils';
 
-interface FileUploadInterface {
-    action: (source: string) => void
+interface Properties {
+    showOnScreen: (linkToPicture: string) => void;
 }
 
-const FileUpload = (props: FileUploadInterface) => {
-    const [filePicked, setPicked] = useState(false)
-    const [fileUploaded, setUploaded] = useState(false)
-    const [fileLocator, setURL] = useState('/none/')
-    const [outOfService, setOOF] = useState(false)
-
-    const waitForFile = () => {
-        (document.getElementById('fileIn')! as HTMLInputElement).onchange = () => {
-            setPicked(true)
-            setUploaded(false)
-            setURL('/none/')
-        }
-    }
-
-    const submitFile = () => {
-        if (fileUploaded) {
-            props.action(storage + fileLocator)
-            return
-        }
-
-        const fileInputElement = document.getElementById('fileIn')! as HTMLInputElement
-
-        if (fileInputElement.files != null) {
-            var data = new FormData()
-            data.append('image', fileInputElement.files[0])
-
-            props.action('Sending image to storage...')
-
-            fetch(storage + '/store', {
-                method: 'POST',
-                body: data
-            })
-                .then(res => res.json())
-                .then(res => {
-                    props.action(storage + res.url)
-                    setUploaded(true)
-                    setURL(res.url)
-                })
-                .catch((e) => {
-                    props.action("Sorry, we're out of service right now :(")
-                    console.log(e)
-                    setOOF(true)
-                })
-        }
-    }
-
-    let pickerDisabled = outOfService ? true : false
-    let submitDisabled = (!filePicked || outOfService) ? true : false
-
-    return (<>
-        <Pushable
-            color='yellow'
-            disabled={pickerDisabled}
-            content={
-                (labelStyle: object) => {
-                    return (<>
-                        <input type="file" id="fileIn" style={{ display: 'none' }} />
-                        <label htmlFor="fileIn" className='actionInButton' onClick={pickerDisabled ? () => { } : waitForFile} style={labelStyle}>
-                            {Icon("pickfile")}
-                        </label>
-                    </>)
-                }
-            }
-            args={outOfService ? { cursor: 'default' } : {}}
-            style={{ margin: '25px 10px' }}
-        />
-
-        <Pushable
-            color='green'
-            disabled={submitDisabled}
-            content={
-                (labelStyle: object) => {
-                    return (<>
-                        <input type="submit" id='submit' style={{ display: 'none' }} />
-                        <label htmlFor="submit" className='actionInButton' onClick={(submitDisabled ? () => { } : submitFile)} style={labelStyle} >
-                            {Icon("upload")}
-                        </label>
-                    </>)
-                }
-            }
-            args={(!filePicked || outOfService) ? { cursor: 'default' } : {}}
-            style={{ margin: '25px 10px' }}
-        />
-    </>)
+enum Situation {
+    outOfService = -1,
+    fileNotPicked = 0,
+    filePicked = 1,
+    fileUploaded = 2,
 }
 
-export default FileUpload
+const FileUpload = (props: Properties): ReactElement => {
+    const [status, setStatus] = useState<Situation>(Situation.fileNotPicked);
+    const [pathOnStorage, setPath] = useState<string>('/none/');
+    const [form, setForm] = useState<FormData>();
+
+    const registerPickedFile = (event: FormEvent<HTMLInputElement>): void => {
+        const files = event.currentTarget.files;
+        if (files === null || files[0] === null) return;
+
+        setStatus(Situation.filePicked);
+        setPath('/none/');
+
+        const data = new FormData();
+        data.append('image', files[0]);
+
+        setForm(data);
+    };
+
+    const submitFile = async (): Promise<void> => {
+        if (status === Situation.fileUploaded) {
+            props.showOnScreen(storageURL + pathOnStorage);
+            return;
+        }
+
+        if (!form) return;
+
+        props.showOnScreen('Sending image to storage...');
+
+        const storageResponse = await sendToStorage(form).catch(err => console.log(err));
+
+        if (!storageResponse) {
+            setStatus(Situation.outOfService);
+            props.showOnScreen("Sorry, we're out of service right now :(");
+            return;
+        }
+
+        setPath(storageResponse);
+        setStatus(Situation.fileUploaded);
+        props.showOnScreen(storageURL + storageResponse);
+    };
+
+    const pickerDisabled = status === Situation.outOfService;
+    const submitDisabled = status < Situation.filePicked;
+
+    return (
+        <>
+            <Pushable
+                class='actionButton'
+                color='yellow'
+                disabled={pickerDisabled}
+                content={(labelStyle: object) => {
+                    return (
+                        <>
+                            <input type='file' id='fileIn' style={{ display: 'none' }} onChange={event => registerPickedFile(event)} />
+                            <label htmlFor='fileIn' className='actionInButton' style={labelStyle} >
+                                {Icon('pickfile')}
+                            </label>
+                        </>
+                    );
+                }}
+                args={pickerDisabled ? { cursor: 'default' } : {}}
+            />
+
+            <Pushable
+                class='actionButton'
+                color='green'
+                content={Icon}
+                args={'upload'}
+                action={submitFile}
+                disabled={submitDisabled}
+            />
+        </>
+    );
+};
+
+export default FileUpload;

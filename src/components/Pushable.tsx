@@ -1,23 +1,23 @@
-interface PushableProperties {
-    color: string
-    disabled?: boolean
-    width?: string
-    style?: object
-    action?: (any: any) => void
+interface pushableProperties {
+    class?: string;
+    color: string;
+    disabled?: boolean;
+    width?: string;
+    action?: (any: any) => any;
 
-    content: (any: any) => any
-    args: any
+    content: (any: any) => any;
+    args: any;
 }
 
-const Pushable = (props: PushableProperties) => {
-    let pushableStyle = 'pushable ' + (props.disabled ? 'pushableDisabled' : '')
-    let shadowStyle = 'shadow ' + (props.disabled ? 'shadowDisabled' : '')
-    let edgeStyle = 'edge ' + props.color
-    let frontStyle = 'front ' + (props.disabled ? 'frontDisabled' : '')
+const Pushable = (props: pushableProperties) => {
+    let pushableStyle = 'pushable ' + (props.disabled ? 'pushableDisabled ' : '') + props.class;
+    let shadowStyle = 'shadow ' + (props.disabled ? 'shadowDisabled ' : '');
+    let edgeStyle = 'edge ' + props.color + ' ';
+    let frontStyle = 'front ' + (props.disabled ? 'frontDisabled ' : '');
 
     return (
         <div>
-            <div className={pushableStyle} style={props.style}>
+            <div className={pushableStyle}>
                 <span className={shadowStyle} />
                 <span className={edgeStyle} />
                 <span className={frontStyle} style={{ width: props.width }} onClick={props.action}>
@@ -25,7 +25,7 @@ const Pushable = (props: PushableProperties) => {
                 </span>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Pushable
+export default Pushable;
