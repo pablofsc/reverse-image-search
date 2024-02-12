@@ -1,4 +1,4 @@
-export const storageURL = 'https://pablofsc-image-store.herokuapp.com';
+export const storageURL = 'https://pfsc-image-store.fly.dev';
 
 export const sendToStorage = async (form: FormData): Promise<string | void> => {
     return await fetch(storageURL + '/store', {
